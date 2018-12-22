@@ -31,6 +31,28 @@ namespace server.Controllers
             return Question;
         }
 
+        [HttpPatch("{id}/upvote")]
+        public ActionResult UpvoteQuestion(Guid id)
+        {
+            var Question = Questions.SingleOrDefault(t => t.Id == id);
+            if (Question == null) return NotFound();
+
+            // Warning, this isnt really atomic
+            Question.Score++;
+            return new JsonResult(Question);
+        }
+
+        [HttpPatch("{id}/downvote")]
+        public ActionResult DownvoteQuestion(Guid id)
+        {
+            var Question = Questions.SingleOrDefault(t => t.Id == id);
+            if (Question == null) return NotFound();
+
+            // Warning, this isnt really atomic
+            Question.Score--;
+            return new JsonResult(Question);
+        }
+
         [HttpDelete("{id}")]
         public ActionResult RemoveQuestion(Guid id)
         {

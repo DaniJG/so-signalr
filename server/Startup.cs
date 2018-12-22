@@ -44,7 +44,11 @@ namespace server
 
             // Enable CORS so the Vue client can send requests
             app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:8080"));
+                builder
+                    .WithOrigins("http://localhost:8080")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+            );
 
             app.UseHttpsRedirection();
             app.UseMvc();
