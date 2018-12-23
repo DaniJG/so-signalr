@@ -1,11 +1,7 @@
 <template>
-  <li class="card container">
+  <li class="card container" @click="onOpenQuestion">
     <div class="card-body row">
-      <h3 class="col-1 text-center scoring">
-        <button class="btn btn-link btn-lg p-0 d-block mx-auto" @click="onUpvote"><i class="fas fa-sort-up" /></button>
-        <span class="d-block mx-auto">{{ question.score }}</span>
-        <button class="btn btn-link btn-lg p-0 d-block mx-auto" @click="onDownvote"><i class="fas fa-sort-down" /></button>
-      </h3>
+      <question-score :question="question" class="col-1" />
       <div class="col-11">
         <h5 class="card-title">{{ question.title }}</h5>
         <p><vue-markdown>{{ question.body }}</vue-markdown></p>
@@ -17,10 +13,12 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
+import QuestionScore from '@/components/question-score'
 
 export default {
   components: {
-    VueMarkdown
+    VueMarkdown,
+    QuestionScore
   },
   props: {
     question: {
@@ -29,22 +27,9 @@ export default {
     }
   },
   methods: {
-    onUpvote () {
-      this.$http.patch(`/api/question/${this.question.id}/upvote`).then(res => {
-        Object.assign(this.question, res.data)
-      })
-    },
-    onDownvote () {
-      this.$http.patch(`/api/question/${this.question.id}/downvote`).then(res => {
-        Object.assign(this.question, res.data)
-      })
+    onOpenQuestion () {
+      this.$router.push({name: 'Question', params: {id: this.question.id}})
     }
   }
 }
 </script>
-
-<style scoped>
-.scoring .btn-link{
-  line-height: 1;
-}
-</style>

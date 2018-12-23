@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace server.Models
 {
@@ -9,5 +10,6 @@ namespace server.Models
         public string Body { get; set; }
         public int Score { get; set; }
         public bool Deleted { get;set; }
+        public List<Answer> Answers { get;set; }
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using server.Hubs;
 
 namespace server
 {
@@ -26,6 +27,7 @@ namespace server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -48,7 +50,14 @@ namespace server
                     .WithOrigins("http://localhost:8080")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
+                    .AllowCredentials()
             );
+
+            // Register SignalR hubs
+            app.UseSignalR(route =>
+            {
+                route.MapHub<QuestionHub>("/question-hub");
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
