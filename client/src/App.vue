@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow">
       <a class="navbar-brand" href="#/">mini-SO</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -19,7 +19,7 @@
       </div>
     </nav>
 
-    <main role="main" class="container mt-3">
+    <main role="main" class="container mt-4">
       <router-view/>
     </main>
   </div>

@@ -17,8 +17,7 @@
                       :max-rows="10">
         </b-form-textarea>
       </b-form-group>
-      <!-- <b-button class="float-right ml-2" type="submit" variant="primary">Submit</b-button>
-      <b-button class="float-right" type="reset" variant="secondary">Cancel</b-button> -->
+
       <button class="btn btn-primary float-right ml-2" type="submit" >Submit</button>
       <button class="btn btn-secondary float-right" type="reset">Cancel</button>
     </b-form>

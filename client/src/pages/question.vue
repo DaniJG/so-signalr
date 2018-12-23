@@ -13,26 +13,29 @@
       </li>
     </ul>
     <footer>
-      <button class="btn btn-link" @click="onReturnHome">Back to list</button>
-      <button class="btn btn-primary float-right" @click="onAddAnswer">New Answer</button>
+      <button class="btn btn-primary float-right" v-b-modal.addAnswerModal><i class="fas fa-edit"/> Post your Answer</button>
+      <button class="btn btn-link float-right" @click="onReturnHome">Back to list</button>
     </footer>
+    <add-answer-modal :question-id="this.questionId" @answer-added="onAnswerAdded"/>
   </article>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown'
 import QuestionScore from '@/components/question-score'
+import AddAnswerModal from '@/components/add-answer-modal'
 
 export default {
   components: {
     VueMarkdown,
-    QuestionScore
+    QuestionScore,
+    AddAnswerModal
   },
   data () {
     return {
       question: null,
       answers: [],
-      questionid: this.$route.params.id
+      questionId: this.$route.params.id
     }
   },
   computed: {
@@ -41,16 +44,29 @@ export default {
     }
   },
   created () {
-    this.$http.get(`/api/question/${this.questionid}`).then(res => {
+    // Load the question and notify the server we are watching the question
+    this.$http.get(`/api/question/${this.questionId}`).then(res => {
       this.question = res.data
+    }).then(() => this.$questionHub.questionOpened(this.questionId))
+    // Listen for notifications that new answer were added
+    this.$questionHub.$on('answer-added', answer => {
+      if (this.question.id !== answer.questionId) return
+      this.onAnswerAdded(answer)
     })
+  },
+  beforeDestroy () {
+    // Notify the server we stopped watching the question
+    this.$questionHub.questionClosed(this.questionId)
   },
   methods: {
     onReturnHome () {
       this.$router.push({name: 'Home'})
     },
-    onAddAnswer () {
-
+    // This method can be invoked directly from the modal or after receiving a server event through signalR
+    onAnswerAdded (answer) {
+      if (!this.question.answers.find(a => a.id === answer.id)) {
+        this.question.answers.push(answer)
+      }
     }
   }
 }

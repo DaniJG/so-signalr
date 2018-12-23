@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
-import SignalRHub from './signalr-hub'
+import QuestionHub from './question-hub'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@fortawesome/fontawesome-free/css/all.css'
@@ -18,7 +18,7 @@ Vue.prototype.$http = axios
 
 // Install Vue extensions
 Vue.use(BootstrapVue)
-Vue.use(SignalRHub)
+Vue.use(QuestionHub)
 
 /* eslint-disable no-new */
 new Vue({

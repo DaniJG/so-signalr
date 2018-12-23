@@ -15,9 +15,9 @@ export default {
     }
   },
   created () {
-    this.$questionHub.$on('question-score-changed', question => {
-      if (this.question.id !== question.id) return
-      Object.assign(this.question, question)
+    this.$questionHub.$on('score-changed', ({questionId, score}) => {
+      if (this.question.id !== questionId) return
+      Object.assign(this.question, { score })
     })
   },
   methods: {

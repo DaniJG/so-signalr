@@ -1,4 +1,4 @@
-# so-signalr
+# SO-signalR
 
 > A Vue.js project
 

@@ -4,8 +4,10 @@
       <question-score :question="question" class="col-1" />
       <div class="col-11">
         <h5 class="card-title">{{ question.title }}</h5>
-        <p><vue-markdown>{{ question.body }}</vue-markdown></p>
-        <a href="#" class="card-link">View question</a>
+        <p><vue-markdown :source="question.body" /></p>
+        <a href="#" class="card-link">
+          View question <span class="badge badge-success">{{ question.answerCount }}</span>
+        </a>
       </div>
     </div>
   </li>
@@ -25,6 +27,12 @@ export default {
       type: Object,
       required: true
     }
+  },
+  created () {
+    this.$questionHub.$on('answer-count-changed', ({questionId, answerCount}) => {
+      if (this.question.id !== questionId) return
+      Object.assign(this.question, { answerCount })
+    })
   },
   methods: {
     onOpenQuestion () {
