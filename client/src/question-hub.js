@@ -10,13 +10,13 @@ export default {
     const questionHub = new Vue() // use new Vue instance as an event bus
 
     // Forward hub events through the event, so we can listen for them in the Vue components
-    connection.on('SendQuestionScoreChange', (questionId, score) => {
+    connection.on('QuestionScoreChange', (questionId, score) => {
       questionHub.$emit('score-changed', {questionId, score})
     })
-    connection.on('SendAnswerCountChange', (questionId, answerCount) => {
+    connection.on('AnswerCountChange', (questionId, answerCount) => {
       questionHub.$emit('answer-count-changed', {questionId, answerCount})
     })
-    connection.on('SendAnswerAdded', answer => {
+    connection.on('AnswerAdded', answer => {
       questionHub.$emit('answer-added', answer)
     })
 

@@ -73,9 +73,9 @@ namespace server.Controllers
             question.Answers.Add(answer);
 
             // Notify anyone connected to the group for this answer
-            await this.hubContext.Clients.Group(id.ToString()).SendAnswerAdded(answer);
+            await this.hubContext.Clients.Group(id.ToString()).AnswerAdded(answer);
             // Notify every client
-            await this.hubContext.Clients.All.SendAnswerCountChange(question.Id, question.Answers.Count);
+            await this.hubContext.Clients.All.AnswerCountChange(question.Id, question.Answers.Count);
 
             return new JsonResult(answer);
         }
@@ -90,7 +90,7 @@ namespace server.Controllers
             question.Score++;
 
             // Notify every client
-            await this.hubContext.Clients.All.SendQuestionScoreChange(question.Id, question.Score);
+            await this.hubContext.Clients.All.QuestionScoreChange(question.Id, question.Score);
 
             return new JsonResult(question);
         }
@@ -105,7 +105,7 @@ namespace server.Controllers
             question.Score--;
 
             // Notify every client
-            await this.hubContext.Clients.All.SendQuestionScoreChange(question.Id, question.Score);
+            await this.hubContext.Clients.All.QuestionScoreChange(question.Id, question.Score);
 
             return new JsonResult(question);
         }
