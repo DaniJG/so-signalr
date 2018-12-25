@@ -14,14 +14,6 @@ export default {
       required: true
     }
   },
-  created () {
-    // Listen to score changes coming from SignalR events
-    this.$questionHub.$on('score-changed', this.onScoreChanged)
-  },
-  beforeDestroy () {
-    // Make sure to cleanup SignalR event handlers when removing the component
-    this.$questionHub.$off('score-changed', this.onScoreChanged)
-  },
   methods: {
     onUpvote () {
       this.$http.patch(`/api/question/${this.question.id}/upvote`).then(res => {
@@ -32,11 +24,6 @@ export default {
       this.$http.patch(`/api/question/${this.question.id}/downvote`).then(res => {
         Object.assign(this.question, res.data)
       })
-    },
-    // This is called from the server through SignalR
-    onScoreChanged ({ questionId, score }) {
-      if (this.question.id !== questionId) return
-      Object.assign(this.question, { score })
     }
   }
 }

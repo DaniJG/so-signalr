@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using server.Hubs;
 using server.Models;
 
 namespace server.Controllers
@@ -15,7 +14,6 @@ namespace server.Controllers
     [ApiController]
     public class QuestionController : ControllerBase
     {
-        private readonly IHubContext<QuestionHub, IQuestionHub> hubContext;
         private static ConcurrentBag<Question> questions = new ConcurrentBag<Question> {
             new Question {
                 Id = Guid.Parse("b00c58c0-df00-49ac-ae85-0a135f75e01b"),
@@ -24,11 +22,6 @@ namespace server.Controllers
                 Answers = new List<Answer>{ new Answer { Body = "Sample answer" }}
             }
         };
-
-        public QuestionController(IHubContext<QuestionHub, IQuestionHub> questionHub)
-        {
-            this.hubContext = questionHub;
-        }
 
         [HttpGet()]
         public IEnumerable GetQuestions()
@@ -62,7 +55,7 @@ namespace server.Controllers
         }
 
         [HttpPost("{id}/answer")]
-        public async Task<ActionResult> AddAnswerAsync(Guid id, [FromBody]Answer answer)
+        public ActionResult AddAnswerAsync(Guid id, [FromBody]Answer answer)
         {
             var question = questions.SingleOrDefault(t => t.Id == id && !t.Deleted);
             if (question == null) return NotFound();
@@ -72,16 +65,11 @@ namespace server.Controllers
             answer.Deleted = false;
             question.Answers.Add(answer);
 
-            // Notify anyone connected to the group for this answer
-            await this.hubContext.Clients.Group(id.ToString()).AnswerAdded(answer);
-            // Notify every client
-            await this.hubContext.Clients.All.AnswerCountChange(question.Id, question.Answers.Count);
-
             return new JsonResult(answer);
         }
 
         [HttpPatch("{id}/upvote")]
-        public async Task<ActionResult> UpvoteQuestionAsync(Guid id)
+        public ActionResult UpvoteQuestionAsync(Guid id)
         {
             var question = questions.SingleOrDefault(t => t.Id == id && !t.Deleted);
             if (question == null) return NotFound();
@@ -89,23 +77,17 @@ namespace server.Controllers
             // Warning, this isnt really atomic!
             question.Score++;
 
-            // Notify every client
-            await this.hubContext.Clients.All.QuestionScoreChange(question.Id, question.Score);
-
             return new JsonResult(question);
         }
 
         [HttpPatch("{id}/downvote")]
-        public async Task<ActionResult> DownvoteQuestionAsync(Guid id)
+        public ActionResult DownvoteQuestionAsync(Guid id)
         {
             var question = questions.SingleOrDefault(t => t.Id == id && !t.Deleted);
             if (question == null) return NotFound();
 
             // Warning, this isnt really atomic
             question.Score--;
-
-            // Notify every client
-            await this.hubContext.Clients.All.QuestionScoreChange(question.Id, question.Score);
 
             return new JsonResult(question);
         }
