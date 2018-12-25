@@ -47,23 +47,24 @@ export default {
     // Load the question and notify the server we are watching the question
     this.$http.get(`/api/question/${this.questionId}`).then(res => {
       this.question = res.data
-    }).then(() => this.$questionHub.questionOpened(this.questionId))
-    // Listen for notifications that new answer were added
-    this.$questionHub.$on('answer-added', answer => {
-      if (this.question.id !== answer.questionId) return
-      this.onAnswerAdded(answer)
+      return this.$questionHub.questionOpened(this.questionId)
     })
+    // Listen for notifications that new answer were added
+    this.$questionHub.$on('answer-added', this.onAnswerAdded)
   },
   beforeDestroy () {
     // Notify the server we stopped watching the question
     this.$questionHub.questionClosed(this.questionId)
+    // Make sure to cleanup SignalR event handlers when removing the component
+    this.$questionHub.$off('answer-added', this.onAnswerAdded)
   },
   methods: {
     onReturnHome () {
       this.$router.push({name: 'Home'})
     },
-    // This method can be invoked directly from the modal or after receiving a server event through signalR
+    // This method can be called directly from the modal or after receiving an event through signalR
     onAnswerAdded (answer) {
+      if (this.question.id !== answer.questionId) return
       if (!this.question.answers.find(a => a.id === answer.id)) {
         this.question.answers.push(answer)
       }
