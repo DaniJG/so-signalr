@@ -20,15 +20,15 @@ yarn-error.log*
 *.sln.docstates
 
 # C# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-build/
-bld/
-bin/
-Bin/
-obj/
-Obj/
+server/[Dd]ebug/
+server/[Dd]ebugPublic/
+server/[Rr]elease/
+server/[Rr]eleases/
+server/x64/
+server/x86/
+server/build/
+server/bld/
+server/bin/
+server/Bin/
+server/obj/
+server/Obj/
