@@ -34,7 +34,7 @@ export default {
       })
     },
     // This is called from the server through SignalR
-    onScoreChanged ({questionId, score}) {
+    onScoreChanged ({ questionId, score }) {
       if (this.question.id !== questionId) return
       Object.assign(this.question, { score })
     }

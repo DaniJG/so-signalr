@@ -38,10 +38,10 @@ export default {
   },
   methods: {
     onOpenQuestion () {
-      this.$router.push({name: 'Question', params: {id: this.question.id}})
+      this.$router.push({ name: 'Question', params: { id: this.question.id } })
     },
     // This is called from the server through SignalR
-    onAnswerCountChanged ({questionId, answerCount}) {
+    onAnswerCountChanged ({ questionId, answerCount }) {
       if (this.question.id !== questionId) return
       Object.assign(this.question, { answerCount })
     }

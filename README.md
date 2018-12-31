@@ -7,7 +7,7 @@ It serves as an example of how VueJS can be integrated with SignalR by implement
 
 ## Quick Start
 1. Clone this repo.
-1. Open a terminal and navigate to the client folder. Restore the dependencies with `npm install`, then run `npm run dev`. It will automatically reload when the client code changes.
+1. Open a terminal and navigate to the client folder. Restore the dependencies with `npm install`, then run `npm run serve`. It will automatically reload when the client code changes.
 1. Open a second terminal and navigate to the server folder. Restore the dependencies with `dotnet restore`, then run the server with `dotnet run`. Alternatively use `dotnet watch run` if you want to automatically reload when the server code changes.
 1. The frontend will be listening on http://localhost:8080 while the backend will be listening at http://localhost:5100
 
@@ -17,6 +17,6 @@ The backed is an ASP.NET Core 2.2 project providing a REST API. It was initializ
 On top of that, it provides a SignalR hub where clients can connect so they receive an event when question scores change and new questions are added.
 
 ## Frontend
-The frontend is a Vue 2.5 project. It was initialized using the [Vue-CLI](https://cli.vuejs.org/) with `vue init webpack` and provides a minimalistic Stack Overflow site on top of the API provided by the backend, with Bootstrap used for styling.
+The frontend is a Vue 2.5 project. It was initialized using the [Vue-CLI 3](https://cli.vuejs.org/) with `vue create` and provides a minimalistic Stack Overflow site on top of the API provided by the backend, with Bootstrap used for styling.
 
 The [SignalR JavaScript client](https://docs.microsoft.com/en-us/aspnet/core/signalr/javascript-client?view=aspnetcore-2.2) was installed and is used to intialize a connection with the backend SignalR hub during app startup. A simple Vue plugin is provided so any component can receive SignalR events from the server as well as submit events to the server.

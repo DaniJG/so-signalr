@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     onReturnHome () {
-      this.$router.push({name: 'Home'})
+      this.$router.push({ name: 'Home' })
     },
     // This method can be called directly from the modal or after receiving an event through signalR
     onAnswerAdded (answer) {
