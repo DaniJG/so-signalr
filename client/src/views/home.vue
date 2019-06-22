@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import QuestionPreview from '@/components/question-preview'
 import AddQuestionModal from '@/components/add-question-modal'
 
@@ -36,17 +36,27 @@ export default {
     }
   },
   computed: {
+    ...mapState('context', [
+      'profile'
+    ]),
     ...mapGetters('context', [
       'isAuthenticated'
     ])
   },
   created () {
+    this.$questionHub.$on('question-added', this.onQuestionAdded)
     this.$http.get('/api/question').then(res => {
       this.questions = res.data
     })
   },
+  beforeDestroy () {
+    // Make sure to cleanup SignalR event handlers when removing the component
+    this.$questionHub.$off('question-added', this.onQuestionAdded)
+  },
   methods: {
     onQuestionAdded (question) {
+      // make sure the question doesnt exist yet (as it will also arrive through signalR!)
+      if (this.questions.some(q => q.id === question.id)) return
       this.questions = [question, ...this.questions]
     }
   }

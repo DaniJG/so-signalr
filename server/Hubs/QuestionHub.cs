@@ -7,6 +7,7 @@ namespace server.Hubs
 {
     public interface IQuestionHub
     {
+        Task QuestionAdded(Question question);
         Task QuestionScoreChange(Guid questionId, int score);
         Task AnswerCountChange(Guid questionId, int answerCount);
         Task AnswerAdded(Answer answer);

@@ -9,7 +9,7 @@
         </div>
         <p><vue-markdown :source="question.body" /></p>
         <a href="#" class="card-link" @click="onOpenQuestion">
-          View question <span class="badge badge-success" v-b-tooltip.d400 title="number of answer(s)">{{ question.answerCount }}</span>
+          View question <span class="badge badge-success" v-b-tooltip.d400 title="number of answer(s)">{{ question.answerCount || 0 }}</span>
         </a>
       </div>
     </div>

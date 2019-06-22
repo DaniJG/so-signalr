@@ -72,13 +72,14 @@ namespace server.Controllers
 
         [HttpPost()]
         [Authorize]
-        public Question AddQuestion([FromBody]Question question)
+        public async Task<Question> AddQuestion([FromBody]Question question)
         {
             question.Id = Guid.NewGuid();
             question.CreatedBy = this.User.Identity.Name;
             question.Deleted = false;
             question.Answers = new List<Answer>();
             questions.Add(question);
+            await this.hubContext.Clients.All.QuestionAdded(question);
             return question;
         }
 

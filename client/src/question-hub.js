@@ -22,6 +22,9 @@ export default {
         .build()
 
       // Forward hub events through the event, so we can listen for them in the Vue components
+      connection.on('QuestionAdded', (question) => {
+        questionHub.$emit('question-added', question)
+      })
       connection.on('QuestionScoreChange', (questionId, score) => {
         questionHub.$emit('score-changed', { questionId, score })
       })
