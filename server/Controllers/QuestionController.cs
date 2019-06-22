@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using server.Hubs;
@@ -52,6 +53,7 @@ namespace server.Controllers
         }
 
         [HttpPost()]
+        [Authorize]
         public Question AddQuestion([FromBody]Question question)
         {
             question.Id = Guid.NewGuid();
@@ -62,6 +64,7 @@ namespace server.Controllers
         }
 
         [HttpPost("{id}/answer")]
+        [Authorize]
         public async Task<ActionResult> AddAnswerAsync(Guid id, [FromBody]Answer answer)
         {
             var question = questions.SingleOrDefault(t => t.Id == id && !t.Deleted);
@@ -81,6 +84,7 @@ namespace server.Controllers
         }
 
         [HttpPatch("{id}/upvote")]
+        [Authorize]
         public async Task<ActionResult> UpvoteQuestionAsync(Guid id)
         {
             var question = questions.SingleOrDefault(t => t.Id == id && !t.Deleted);
@@ -96,6 +100,7 @@ namespace server.Controllers
         }
 
         [HttpPatch("{id}/downvote")]
+        [Authorize]
         public async Task<ActionResult> DownvoteQuestionAsync(Guid id)
         {
             var question = questions.SingleOrDefault(t => t.Id == id && !t.Deleted);

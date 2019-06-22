@@ -50,6 +50,6 @@ export default {
     }
     connection.onclose(() => start())
 
-    start()
+    // start()
   }
 }
