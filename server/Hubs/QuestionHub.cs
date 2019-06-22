@@ -10,6 +10,8 @@ namespace server.Hubs
         Task QuestionScoreChange(Guid questionId, int score);
         Task AnswerCountChange(Guid questionId, int answerCount);
         Task AnswerAdded(Answer answer);
+
+        Task LiveChatMessageReceived(string username, string message);
     }
 
     public class QuestionHub: Hub<IQuestionHub>
@@ -27,7 +29,11 @@ namespace server.Hubs
         public async Task LeaveQuestionGroup(Guid questionId)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, questionId.ToString());
+        }
 
+        public async Task SendLiveChatMessage(string message)
+        {
+            await Clients.All.LiveChatMessageReceived(Context.UserIdentifier, message);
         }
     }
 }

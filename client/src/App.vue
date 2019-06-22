@@ -7,6 +7,7 @@
     </main>
 
     <login-modal />
+    <live-chat-modal />
   </div>
 </template>
 
@@ -14,12 +15,14 @@
 import { mapActions } from 'vuex'
 import MainNavbar from './components/main-navbar'
 import LoginModal from './components/login-modal'
+import LiveChatModal from '@/components/live-chat-modal'
 
 export default {
   name: 'App',
   components: {
     MainNavbar,
-    LoginModal
+    LoginModal,
+    LiveChatModal
   },
   mounted () {
     this.restoreContext()

@@ -31,6 +31,9 @@ export default {
       connection.on('AnswerAdded', answer => {
         questionHub.$emit('answer-added', answer)
       })
+      connection.on('LiveChatMessageReceived', (username, text) => {
+        questionHub.$emit('chat-message-received', { username, text })
+      })
 
       // You need to call connection.start() to establish the connection but the client wont handle reconnecting for you!
       // Docs recommend listening onclose and handling it there.
@@ -74,6 +77,13 @@ export default {
 
       return startedPromise
         .then(() => connection.invoke('LeaveQuestionGroup', questionId))
+        .catch(console.error)
+    }
+    questionHub.sendMessage = (message) => {
+      if (!startedPromise) return
+
+      return startedPromise
+        .then(() => connection.invoke('SendLiveChatMessage', message))
         .catch(console.error)
     }
   }

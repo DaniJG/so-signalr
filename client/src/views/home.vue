@@ -5,6 +5,9 @@
       <button v-b-modal.addQuestionModal :disabled="!isAuthenticated" class="btn btn-primary mt-2 float-right">
         <i class="fas fa-plus"/> Ask a question
       </button>
+      <button v-b-modal.liveChatModal :disabled="!isAuthenticated" class="btn btn-secondary mt-2 mr-2 float-right">
+        <i class="fas fa-comments"/> Live chat
+      </button>
     </h1>
     <ul class="list-group question-previews mt-4">
       <question-preview

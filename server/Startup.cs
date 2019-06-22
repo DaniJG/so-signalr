@@ -67,7 +67,7 @@ namespace server
                     // inspect whether there is a JWT token either in the header or query string
                     options.ForwardDefaultSelector = ctx =>
                     {
-                        if (ctx.Request.Query.ContainsKey("jwt_token")) return JWTAuthScheme;
+                        if (ctx.Request.Query.ContainsKey("access_token")) return JWTAuthScheme;
                         if (ctx.Request.Headers.ContainsKey("Authorization")) return JWTAuthScheme;
                         return CookieAuthScheme;
                     };
@@ -94,8 +94,8 @@ namespace server
                     {
                         OnMessageReceived = ctx =>
                         {
-                            if (ctx.Request.Query.ContainsKey("jwt_token")){
-                              ctx.Token = ctx.Request.Query["jwt_token"];
+                            if (ctx.Request.Query.ContainsKey("access_token")){
+                              ctx.Token = ctx.Request.Query["access_token"];
                             }
                             return Task.CompletedTask;
                         }
