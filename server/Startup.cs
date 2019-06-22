@@ -50,9 +50,9 @@ namespace server
                 // Now configure specific Cookie and JWT auth options
                 .AddCookie(CookieAuthScheme, options =>
                 {
-                    // Change the cookie name and more importantly
-                    options.Cookie.Name = "soSignalRAuthCookie";
-                    // Set the samesite cookie parameter as none, otherwise a scenario where the client is on a different domain wont work!
+                    // Set the cookie
+                    options.Cookie.Name = "soSignalR.AuthCookie";
+                    // Set the samesite cookie parameter as none, otherwise CORS scenarios where the client uses a different domain wont work!
                     options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
                     // Simply return 401 responses when authentication fails (as opposed to default redirecting behaviour)
                     options.Events = new CookieAuthenticationEvents
@@ -63,50 +63,39 @@ namespace server
                             return Task.CompletedTask;
                         }
                     };
-                    // Finally, add an auth scheme selector that chooses the JWT scheme
-                    // when connecting to SignalR's hub using the /question-hub-jwt path
+                    // In order to decide the between both schemas
+                    // inspect whether there is a JWT token either in the header or query string
                     options.ForwardDefaultSelector = ctx =>
                     {
-
-                        return ctx.Request.Path.StartsWithSegments("/question-hub-jwt") ? JWTAuthScheme : CookieAuthScheme;
+                        if (ctx.Request.Query.ContainsKey("jwt_token")) return JWTAuthScheme;
+                        if (ctx.Request.Headers.ContainsKey("Authorization")) return JWTAuthScheme;
+                        return CookieAuthScheme;
                     };
-                    // options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    // options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(JWTAuthScheme, options =>
                 {
                     // Configure JWT Bearer Auth to expect our security key
-                    options.TokenValidationParameters =
-                        new TokenValidationParameters
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        LifetimeValidator = (before, expires, token, param) =>
                         {
-                            LifetimeValidator = (before, expires, token, param) =>
-                            {
-                                return expires > DateTime.UtcNow;
-                            },
-                            ValidateAudience = false,
-                            ValidateIssuer = false,
-                            ValidateActor = false,
-                            ValidateLifetime = true,
-                            IssuerSigningKey = SecurityKey,
-                        };
+                            return expires > DateTime.UtcNow;
+                        },
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ValidateActor = false,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = SecurityKey,
+                    };
 
-                    // We have to hook the OnMessageReceived event in order to
-                    // allow the JWT authentication handler to read the access
-                    // token from the query string when a WebSocket or
-                    // Server-Sent Events request comes in.
+                    // The JwtBearer scheme knows how to extract the token from the Authorization header
+                    // but we will need to manually extract it from the query string in the case of requests to the hub
                     options.Events = new JwtBearerEvents
                     {
-                        OnMessageReceived = context =>
+                        OnMessageReceived = ctx =>
                         {
-                            var accessToken = context.Request.Query["jwt_token"];
-
-                            // If the request is for our hub...
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/question-hub-jwt")))
-                            {
-                                // Read the token out of the query string
-                                context.Token = accessToken;
+                            if (ctx.Request.Query.ContainsKey("jwt_token")){
+                              ctx.Token = ctx.Request.Query["jwt_token"];
                             }
                             return Task.CompletedTask;
                         }

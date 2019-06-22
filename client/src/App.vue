@@ -22,11 +22,11 @@ export default {
     LoginModal
   },
   mounted () {
-    this.loadProfile()
+    this.restoreContext()
   },
   methods: {
     ...mapActions('context', [
-      'loadProfile'
+      'restoreContext'
     ])
   }
 }

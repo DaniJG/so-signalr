@@ -11,9 +11,13 @@ export default {
     let connection = null
     let startedPromise = null
     let manuallyClosed = false
-    Vue.prototype.startSignalR = () => {
+
+    Vue.prototype.startSignalR = (jwtToken) => {
       connection = new HubConnectionBuilder()
-        .withUrl(`${Vue.prototype.$http.defaults.baseURL}/question-hub`)
+        .withUrl(
+          `${Vue.prototype.$http.defaults.baseURL}/question-hub`,
+          jwtToken ? { accessTokenFactory: () => jwtToken } : null
+        )
         .configureLogging(LogLevel.Information)
         .build()
 
@@ -53,6 +57,7 @@ export default {
       manuallyClosed = true
       return startedPromise
         .then(() => connection.stop())
+        .then(() => { startedPromise = null })
     }
 
     // Provide methods for components to send messages back to server

@@ -14,9 +14,14 @@ It serves as an example of how VueJS can be integrated with SignalR by implement
 ## Backend
 The backed is an ASP.NET Core 2.2 project providing a REST API. It was initialized using the [.NET Core CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x) with `dotnet new webapi` and provides a simple API for viewing and adding the questions and answers of the site.
 
-On top of that, it provides a SignalR hub where clients can connect so they receive an event when question scores change and new questions are added.
+On top of that:
+- it provides a SignalR hub where clients can connect so they receive an event when question scores change and new questions are added.
+- allows clients authenticating using either of a cookie based schema or a jwt bearer schema
 
 ## Frontend
 The frontend is a Vue 2.5 project. It was initialized using the [Vue-CLI 3](https://cli.vuejs.org/) with `vue create` and provides a minimalistic Stack Overflow site on top of the API provided by the backend, with Bootstrap used for styling.
 
 The [SignalR JavaScript client](https://docs.microsoft.com/en-us/aspnet/core/signalr/javascript-client?view=aspnetcore-2.2) was installed and is used to intialize a connection with the backend SignalR hub during app startup. A simple Vue plugin is provided so any component can receive SignalR events from the server as well as submit events to the server.
+
+[Vuex](https://vuex.vuejs.org/) is used to manage the state related with the user context. It provides methods to login/logout using either of the cookie or jwt bearer schemas, as well as centrally storing the current user profile.
+

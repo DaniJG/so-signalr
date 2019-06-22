@@ -19,23 +19,28 @@ namespace server.Controllers
         private readonly IHubContext<QuestionHub, IQuestionHub> hubContext;
         private static ConcurrentBag<Question> questions = new ConcurrentBag<Question> {
           new Question {
-                Id = Guid.Parse("eb20d554-80be-429c-8418-5a72245bcaf3"),
-                CreatedBy = "terry.pratchett@lspace.com",
-                Title = "Welcome Back!",
-                Body = "This iteration of the sample application showcases how **cookie** and **jwt** based authentication play with Vue and SignalR.\n" +
-                       "Interested? Start by checking out these links:\n" +
-                       " - [SignalR authentication docs](https://docs.microsoft.com/en-us/aspnet/core/signalr/authn-and-authz?view=aspnetcore-2.2)\n" +
-                       " - [Example with multiple authentication schemes](https://github.com/aspnet/AspNetCore/tree/release/2.2/src/Security/samples/PathSchemeSelection)\n" +
-                       " - [Securing APIs in ASP.NET Core](https://www.blinkingcaret.com/2018/07/18/secure-an-asp-net-core-web-api-using-cookies/)",
-                Answers = new List<Answer>()
-            },
-            new Question {
                 Id = Guid.Parse("b00c58c0-df00-49ac-ae85-0a135f75e01b"),
                 CreatedBy = "terry.pratchett@lspace.com",
                 Title = "Welcome",
-                Body = "Welcome to the _mini Stack Overflow_ rip-off!\nThis will help showcasing **SignalR** and its integration with **Vue**",
+                Body = "Welcome to the _mini Stack Overflow_ rip-off!\n" +
+                       "This application was built as an example on how **SignalR** and **Vue** can play together\n" +
+                       " - [Original article in the DotNetCurry magazine](https://www.dotnetcurry.com/aspnet-core/1480/aspnet-core-vuejs-signalr-app)\n" +
+                       " - [GitHub source of this app](https://github.com/DaniJG/so-signalr)",
                 Answers = new List<Answer>{ new Answer { Body = "Sample answer", CreatedBy = "pierre.lemaitre@gmail.com" }}
-            }
+            },
+          new Question {
+                Id = Guid.Parse("eb20d554-80be-429c-8418-5a72245bcaf3"),
+                CreatedBy = "terry.pratchett@lspace.com",
+                Title = "Welcome Back!",
+                Body = "The second iteration enhanced the app adding authentication.\n" +
+                       "It includes examples for both **cookie** and **jwt** based authentication integrated with Vue and SignalR.\n" +
+                       "While this will be the subject of a new DotNetCurry article, you can Start by checking out these links:\n" +
+                       " - [SignalR authentication docs](https://docs.microsoft.com/en-us/aspnet/core/signalr/authn-and-authz?view=aspnetcore-2.2)\n" +
+                       " - [Example with multiple authentication schemes](https://github.com/aspnet/AspNetCore/tree/release/2.2/src/Security/samples/PathSchemeSelection)\n" +
+                       " - [JWT examples with ASP.NET Core](https://jasonwatmore.com/post/2018/08/14/aspnet-core-21-jwt-authentication-tutorial-with-example-api)\n" +
+                       " - [Securing APIs in ASP.NET Core](https://www.blinkingcaret.com/2018/07/18/secure-an-asp-net-core-web-api-using-cookies/)",
+                Answers = new List<Answer>()
+            },
         };
 
         public QuestionController(IHubContext<QuestionHub, IQuestionHub> questionHub)

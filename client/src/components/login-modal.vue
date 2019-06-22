@@ -18,6 +18,12 @@
                       placeholder="Enter your password">
         </b-form-input>
       </b-form-group>
+      <b-form-group label="Authentication mode">
+        <b-form-radio-group
+          id="authMode"
+          v-model="authMode"
+          :options="authOptions"/>
+      </b-form-group>
 
       <button class="btn btn-primary float-right ml-2" type="submit">Login</button>
       <button class="btn btn-secondary float-right" type="reset">Cancel</button>
@@ -34,7 +40,12 @@ export default {
       form: {
         email: '',
         password: ''
-      }
+      },
+      authMode: 'cookie',
+      authOptions: [
+        { text: 'Cookie', value: 'cookie' },
+        { text: 'JWT Bearer', value: 'jwt' }
+      ]
     }
   },
   methods: {
@@ -42,7 +53,7 @@ export default {
       'login'
     ]),
     onSubmit (evt) {
-      this.login(this.form).then(() => {
+      this.login({ authMethod: this.authMode, credentials: this.form }).then(() => {
         this.$refs.loginModal.hide()
       })
     },
