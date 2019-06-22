@@ -1,12 +1,15 @@
 <template>
-  <li class="card container" @click="onOpenQuestion">
+  <li class="card container">
     <div class="card-body row">
       <question-score :question="question" class="col-1" />
       <div class="col-11">
-        <h5 class="card-title">{{ question.title }}</h5>
+        <div class="card-title row">
+          <h5 class="col-8"><a href="#" class="card-link" @click="onOpenQuestion">{{ question.title }}</a></h5>
+          <p class="col-4">Posted by {{ question.createdBy }}</p>
+        </div>
         <p><vue-markdown :source="question.body" /></p>
-        <a href="#" class="card-link">
-          View question <span class="badge badge-success">{{ question.answerCount }}</span>
+        <a href="#" class="card-link" @click="onOpenQuestion">
+          View question <span class="badge badge-success" v-b-tooltip.d400 title="number of answer(s)">{{ question.answerCount }}</span>
         </a>
       </div>
     </div>

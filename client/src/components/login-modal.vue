@@ -1,6 +1,7 @@
 <template>
   <b-modal id="loginModal" ref="loginModal" hide-footer title="Login" @hidden="onHidden">
     <b-form @submit.prevent="onSubmit" @reset.prevent="onCancel">
+      <b-alert show variant="warning">In this test app, any credentials are valid!</b-alert>
       <b-form-group label="Email:" label-for="emailInput">
         <b-form-input id="emailInput"
                       type="email"
@@ -13,7 +14,8 @@
         <b-form-input id="passwordInput"
                       type="password"
                       v-model="form.password"
-                      required>
+                      required
+                      placeholder="Enter your password">
         </b-form-input>
       </b-form-group>
 

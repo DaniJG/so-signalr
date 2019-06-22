@@ -18,11 +18,23 @@ namespace server.Controllers
     {
         private readonly IHubContext<QuestionHub, IQuestionHub> hubContext;
         private static ConcurrentBag<Question> questions = new ConcurrentBag<Question> {
+          new Question {
+                Id = Guid.Parse("eb20d554-80be-429c-8418-5a72245bcaf3"),
+                CreatedBy = "terry.pratchett@lspace.com",
+                Title = "Welcome Back!",
+                Body = "This iteration of the sample application showcases how **cookie** and **jwt** based authentication play with Vue and SignalR.\n" +
+                       "Interested? Start by checking out these links:\n" +
+                       " - [SignalR authentication docs](https://docs.microsoft.com/en-us/aspnet/core/signalr/authn-and-authz?view=aspnetcore-2.2)\n" +
+                       " - [Example with multiple authentication schemes](https://github.com/aspnet/AspNetCore/tree/release/2.2/src/Security/samples/PathSchemeSelection)\n" +
+                       " - [Securing APIs in ASP.NET Core](https://www.blinkingcaret.com/2018/07/18/secure-an-asp-net-core-web-api-using-cookies/)",
+                Answers = new List<Answer>()
+            },
             new Question {
                 Id = Guid.Parse("b00c58c0-df00-49ac-ae85-0a135f75e01b"),
+                CreatedBy = "terry.pratchett@lspace.com",
                 Title = "Welcome",
                 Body = "Welcome to the _mini Stack Overflow_ rip-off!\nThis will help showcasing **SignalR** and its integration with **Vue**",
-                Answers = new List<Answer>{ new Answer { Body = "Sample answer" }}
+                Answers = new List<Answer>{ new Answer { Body = "Sample answer", CreatedBy = "pierre.lemaitre@gmail.com" }}
             }
         };
 
@@ -36,6 +48,7 @@ namespace server.Controllers
         {
             return questions.Where(t => !t.Deleted).Select(q => new {
                 Id = q.Id,
+                CreatedBy = q.CreatedBy,
                 Title = q.Title,
                 Body = q.Body,
                 Score = q.Score,
@@ -57,6 +70,7 @@ namespace server.Controllers
         public Question AddQuestion([FromBody]Question question)
         {
             question.Id = Guid.NewGuid();
+            question.CreatedBy = this.User.Identity.Name;
             question.Deleted = false;
             question.Answers = new List<Answer>();
             questions.Add(question);
@@ -72,6 +86,7 @@ namespace server.Controllers
 
             answer.Id = Guid.NewGuid();
             answer.QuestionId = id;
+            answer.CreatedBy = this.User.Identity.Name;
             answer.Deleted = false;
             question.Answers.Add(answer);
 
