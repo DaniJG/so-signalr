@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using server.Models;
 
@@ -15,6 +16,7 @@ namespace server.Hubs
         Task LiveChatMessageReceived(string username, string message);
     }
 
+    [Authorize]
     public class QuestionHub: Hub<IQuestionHub>
     {
         // No need to implement here the methods defined by IQuestionHub, their purpose is simply
