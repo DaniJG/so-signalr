@@ -12,7 +12,9 @@
       <b-form-group label="Your Question:" label-for="questionInput">
         <b-form-textarea id="questionInput"
                       v-model="form.body"
+                      v-b-tooltip.focus.d800
                       placeholder="What do you need answered?"
+                      title="use markdown to format your question "
                       :rows="6"
                       :max-rows="10">
         </b-form-textarea>

@@ -2,18 +2,20 @@
   <article class="container" v-if="question">
     <header class="row align-items-center">
       <question-score :question="question" class="col-1" />
-      <h3 class="col-11">{{ question.title }}</h3>
+      <h3 class="col-8">{{ question.title }}</h3>
+      <p class="col-3">Posted by: {{ question.createdBy }}</p>
     </header>
     <p class="row">
       <vue-markdown class="offset-1 col-11">{{ question.body }}</vue-markdown>
     </p>
-    <ul class="list-unstyled row" v-if="hasAnswers">
-      <li v-for="answer in question.answers" :key="answer.id" class="offset-1 col-11 border-top py-2">
-        <vue-markdown>{{ answer.body }}</vue-markdown>
+    <ul class="list-unstyled" v-if="hasAnswers">
+      <li v-for="answer in question.answers" :key="answer.id" class="row border-top py-2">
+        <vue-markdown class="offset-1 col-8">{{ answer.body }}</vue-markdown>
+        <p class="col-3">{{ answer.createdBy }}</p>
       </li>
     </ul>
     <footer>
-      <button class="btn btn-primary float-right" v-b-modal.addAnswerModal><i class="fas fa-edit"/> Post your Answer</button>
+      <button class="btn btn-primary float-right" v-b-modal.addAnswerModal :disabled="!isAuthenticated"><i class="fas fa-edit"/> Post your Answer</button>
       <button class="btn btn-link float-right" @click="onReturnHome">Back to list</button>
     </footer>
     <add-answer-modal :question-id="this.questionId" @answer-added="onAnswerAdded"/>
@@ -21,6 +23,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import VueMarkdown from 'vue-markdown'
 import QuestionScore from '@/components/question-score'
 import AddAnswerModal from '@/components/add-answer-modal'
@@ -39,6 +42,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('context', [
+      'isAuthenticated'
+    ]),
     hasAnswers () {
       return this.question.answers.length > 0
     }
