@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios'
 
 const store = {
@@ -18,23 +19,22 @@ const store = {
   },
 
   actions: {
-    loadProfile ({ commit }) {
+    loadProfile ({ commit, getters }) {
       return axios.get('account/context').then(res => {
         commit('setProfile', res.data)
+        if (getters.isAuthenticated) return Vue.prototype.startSignalR()
       })
     },
     login ({ commit }, credentials) {
       return axios.post('account/login', credentials).then(res => {
         commit('setProfile', res.data)
+        return Vue.prototype.startSignalR()
       })
-        .then(() => axios.post('account/token', credentials))
-        .then(res => console.log(res.data))
-        .then(() => axios.get('account/context'))
-        .then(res => console.log(res.data))
     },
     logout ({ commit }) {
       return axios.post('account/logout').then(() => {
         commit('setProfile', {})
+        return Vue.prototype.stopSignalR()
       })
     }
   }
