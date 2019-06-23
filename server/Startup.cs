@@ -40,11 +40,6 @@ namespace server
         {
             services.AddCors();
 
-            services.AddSession(options =>
-            {
-                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
-            });
-
             // Sets the default scheme to cookies
             services.AddAuthentication(CookieAuthScheme)
                 // Now configure specific Cookie and JWT auth options
