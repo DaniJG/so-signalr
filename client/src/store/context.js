@@ -5,7 +5,8 @@ const store = {
   namespaced: true,
 
   state: {
-    profile: {}
+    profile: {},
+    jwtToken: null
   },
 
   getters: {
