@@ -24,7 +24,7 @@ export default {
     LoginModal,
     LiveChatModal
   },
-  mounted () {
+  created () {
     this.restoreContext()
   },
   methods: {
