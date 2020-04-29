@@ -5,6 +5,10 @@ This repo is an example of integrating an [ASP.NET Core](https://docs.microsoft.
 
 It serves as an example of how VueJS can be integrated with SignalR by implementing a minimalistic version of Stack Overflow. SignalR is then used to propagate the changes to the question score and new questions, which serve as examples for receiving and sending events through the SignalR connection.
 
+It's been covered by 2 articles in the DotNetCurry magazine:
+- [Using ASP.NET Core SignalR with Vue.js (to create a mini Stack Overflow rip-off)](https://www.dotnetcurry.com/aspnet-core/1480/aspnet-core-vuejs-signalr-app)
+- [Authentication in ASP.NET Core, SignalR and VueJS applications](https://www.dotnetcurry.com/aspnet-core/1511/authentication-aspnetcore-signalr-vuejs)
+
 ## Quick Start
 1. Clone this repo.
 1. Open a terminal and navigate to the client folder. Restore the dependencies with `npm install`, then run `npm run serve`. It will automatically reload when the client code changes.
